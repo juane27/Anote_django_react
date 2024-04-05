@@ -1,0 +1,52 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgres:13.2
+    container_name: TodoApp_database
+    restart: always
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: TodoApp_db
+      POSTGRES_USER: juane
+      POSTGRES_PASSWORD: juane27
+    ports:
+      - 5432:5432
+
+  adminer:
+    container_name: todoapp_adminer
+    image: adminer:4.8.0
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/app/backend
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    command: python3 manage.py runserver 0.0.0.0:8000
+
+  frontend:
+      build:
+        context: ./frontend/
+        dockerfile: Dockerfile
+      volumes:
+        - ./frontend/todo_app:/app
+        - /frontend/todo_app/node_modules
+      ports:
+        - "3000:3000"
+      environment:
+        - WATCHPACK_POLLING=true
+        - NODE_ENV=development
+        - CHOKIDAR_USEPOLLING=true
+      depends_on:
+        - backend
+      command: npm start
+
