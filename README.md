@@ -1,6 +1,6 @@
 #Anote Anote
 Es una webapp que permite crear, ver, editar y eliminar notas. (CRUD)
-Esta desarrollado con Django en el backend y React en el frontend, y utilizando Docker.
+Esta desarrollado utilizando Django en el backend, React en el frontend y Docker.
 
 
 ![Imagen de ejemplo](Screen.jpg)
